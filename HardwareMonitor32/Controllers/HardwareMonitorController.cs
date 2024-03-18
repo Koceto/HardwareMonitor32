@@ -31,7 +31,7 @@ namespace HardwareMonitor32.Controllers
             Dictionary<string, string> monitorResults = new Dictionary<string, string>();
             try
             {
-                RegistryKey? registryKey;
+                RegistryKey? registryKey = null;
                 if (registryPath.Contains("HKEY_CURRENT_USER"))
                 {
                     string strippedKey = registryPath.Replace("HKEY_CURRENT_USER", "").Trim('\\');
@@ -41,10 +41,6 @@ namespace HardwareMonitor32.Controllers
                 {
                     string strippedKey = registryPath.Replace("HKEY_LOCAL_MACHINE", "").Trim('\\');
                     registryKey = Registry.CurrentUser.OpenSubKey(strippedKey);
-                }
-                else
-                {
-                    registryKey = Registry.CurrentUser.OpenSubKey(registryPath);
                 }
 
                 if (registryKey == null)
