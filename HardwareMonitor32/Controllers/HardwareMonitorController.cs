@@ -20,10 +20,8 @@ namespace HardwareMonitor32.Controllers
         // GET: HardwareMonitor/Status
         [HttpGet]
         [Route("[action]")]
-        public IActionResult Status()
+        public IActionResult Status(bool wrapped)
         {
-            var test = Registry.ClassesRoot;
-
             string? registryPath = this.settings.RegistryPath;
 
             if (String.IsNullOrEmpty(registryPath))
@@ -102,6 +100,10 @@ namespace HardwareMonitor32.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
+            if (wrapped)
+            {
+                return this.Ok(new HWInfo() { Stats = monitorResults });
+            }
             return this.Ok(monitorResults);
         }
     }
