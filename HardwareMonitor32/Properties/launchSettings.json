@@ -1,4 +1,16 @@
 {
+  "profiles": {
+    "HardwareMonitor32": {
+      "commandName": "Project",
+      "applicationUrl": "http://0.0.0.0:5143",
+      "dotnetRunMessages": true
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger"
+    }
+  },
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -6,24 +18,6 @@
     "iisExpress": {
       "applicationUrl": "http://localhost:31801",
       "sslPort": 44347
-    }
-  },
-  "profiles": {
-    "HardwareMonitor32": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://0.0.0.0:5143",
-      "dotnetRunMessages": true
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
     }
   }
 }

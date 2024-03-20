@@ -2,6 +2,7 @@ using HardwareMonitor32.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Win32;
+using System.Text.RegularExpressions;
 
 namespace HardwareMonitor32.Controllers
 {
@@ -21,6 +22,8 @@ namespace HardwareMonitor32.Controllers
         [Route("[action]")]
         public IActionResult Status()
         {
+            var test = Registry.ClassesRoot;
+
             string? registryPath = this.settings.RegistryPath;
 
             if (String.IsNullOrEmpty(registryPath))
@@ -40,7 +43,7 @@ namespace HardwareMonitor32.Controllers
                 else if (registryPath.Contains("HKEY_LOCAL_MACHINE"))
                 {
                     string strippedKey = registryPath.Replace("HKEY_LOCAL_MACHINE", "").Trim('\\');
-                    registryKey = Registry.CurrentUser.OpenSubKey(strippedKey);
+                    registryKey = Registry.LocalMachine.OpenSubKey(strippedKey);
                 }
 
                 if (registryKey == null)
@@ -52,14 +55,29 @@ namespace HardwareMonitor32.Controllers
                 {
                     if (key != null)
                     {
-                        string[] valueNames = key.GetValueNames();
+                        string[] subkeys = key.GetValueNames();
+                        string[] labels = subkeys.Where(sk => sk.StartsWith("label", StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                        string[] values = subkeys.Where(sk => sk.StartsWith("value", StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                        string pattern = @"label(\d+)$";
+                        RegexOptions options = RegexOptions.Multiline | RegexOptions.IgnoreCase;
 
-                        for (int i = 0; i < valueNames.Length; i += 3)
+                        for (int i = 0; i < labels.Length; i++)
                         {
-                            string? label = key.GetValue(valueNames[i])?.ToString();
-                            string? value = key.GetValue(valueNames[i + 1])?.ToString();
-                            string? color = key.GetValue(valueNames[i + 2])?.ToString();
+                            MatchCollection matches = Regex.Matches(labels[i], pattern, options);
+                            string? matchedValue = matches[0]?.Groups[1]?.Value;
+                            if (String.IsNullOrEmpty(matchedValue))
+                            {
+                                continue;
+                            }
 
+                            string? currentValueName = values.FirstOrDefault(v => v.EndsWith(matchedValue));
+                            if (String.IsNullOrEmpty(currentValueName))
+                            {
+                                continue;
+                            }
+
+                            string? label = key.GetValue(labels[i])?.ToString();
+                            string? value = key.GetValue(currentValueName)?.ToString();
                             if (String.IsNullOrEmpty(label) || String.IsNullOrEmpty(value))
                             {
                                 continue;
