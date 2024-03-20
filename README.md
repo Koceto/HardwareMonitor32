@@ -21,6 +21,7 @@ You should receive this message: *[SC] CreateService SUCCESS*
 To delete the service replace *create* with *delete*.
 5. Run the program manually the first time to add the proper firewall configs.
 6. Open services by typing "services" in the search bar.
+7. Open the "*Lon On*" tab, select "*This account*", and fill in you account and password.
 7. Find the newly registered service, open it, and set Startup type: Automatic.
 8. Restart.
 
