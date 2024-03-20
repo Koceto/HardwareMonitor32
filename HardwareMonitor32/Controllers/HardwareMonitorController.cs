@@ -31,7 +31,7 @@ namespace HardwareMonitor32.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Missing required settings key: ${nameof(registryPath)}");
             }
 
-            Dictionary<string, string> monitorResults = new Dictionary<string, string>();
+            List<MonitorStat> monitorResults = new List<MonitorStat>();
             try
             {
                 RegistryKey? registryKey = null;
@@ -58,6 +58,7 @@ namespace HardwareMonitor32.Controllers
                         string[] subkeys = key.GetValueNames();
                         string[] labels = subkeys.Where(sk => sk.StartsWith("label", StringComparison.InvariantCultureIgnoreCase)).ToArray();
                         string[] values = subkeys.Where(sk => sk.StartsWith("value", StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                        string[] colors = subkeys.Where(sk => sk.StartsWith("color", StringComparison.InvariantCultureIgnoreCase)).ToArray();
                         string pattern = @"label(\d+)$";
                         RegexOptions options = RegexOptions.Multiline | RegexOptions.IgnoreCase;
 
@@ -76,13 +77,22 @@ namespace HardwareMonitor32.Controllers
                                 continue;
                             }
 
+                            string? currentColorName = colors.FirstOrDefault(v => v.EndsWith(matchedValue));
+
                             string? label = key.GetValue(labels[i])?.ToString();
                             string? value = key.GetValue(currentValueName)?.ToString();
+                            string? color = key.GetValue(currentColorName)?.ToString();
                             if (String.IsNullOrEmpty(label) || String.IsNullOrEmpty(value))
                             {
                                 continue;
                             }
-                            monitorResults.Add(label, value);
+
+                            monitorResults.Add(new MonitorStat()
+                            {
+                                Name = label,
+                                Value = value,
+                                Color = color ?? String.Empty
+                            });
                         }
                     }
                 }
