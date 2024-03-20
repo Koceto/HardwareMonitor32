@@ -19,6 +19,17 @@ Installation inscriptions for the API.
 4. Execute the following command: *sc create "HardwareMonitor32" binPath="**CHOSEN UNZIP FOLDER**\HardwareMonitor32\Release\HardwareMonitor32.exe"*  
 You should receive this message: *[SC] CreateService SUCCESS*  
 To delete the service replace *create* with *delete*.
-5. Done.
+5. Run the program manually the first time to add the proper firewall configs.
+6. Open services by typing "services" in the search bar.
+7. Find the newly registered service, open it, and set Startup type: Automatic.
+8. Restart.
 
 **Important** - API should be reachable on http://localhost:5167/HardwareMonitor/Status
+
+### Troubleshooting
+These are things you can check to make sure everything is running properly.
+
+* Open services and make sure HardwareMonitor32's service is running.
+* Disable and re-enable "*Auto Start*" in HWInfo
+* Open *Task Scheduler*, click on *Task Scheduler Library* and make sure there's a task for starting HWInfo
+* Restart
