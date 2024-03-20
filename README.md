@@ -16,7 +16,7 @@ Installation inscriptions for the API.
 1. Download the latest zip from the release section
 2. Unzip into a **permanent folder you don't plan on changing soon.**
 3. Open Command Prompt with administrator permissions
-4. Execute the following command: *sc create "HardwareMonitor32" binPath="**CHOSEN UNZIP FOLDER**\HardwareMonitor32\Release\HardwareMonitor32.exe"*  
+4. Execute the following command: *sc create "HardwareMonitor32" binPath="**CHOSEN UNZIP FOLDER**\HardwareMonitor32\HardwareMonitor32.exe"*  
 You should receive this message: *[SC] CreateService SUCCESS*  
 To delete the service replace *create* with *delete*.
 5. Run the program manually the first time to add the proper firewall configs.
